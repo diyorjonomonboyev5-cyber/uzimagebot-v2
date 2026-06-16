@@ -1,8 +1,9 @@
+import os
+import urllib.parse
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
-import urllib.parse
 
-TOKEN = "8610613439:AAGaNi2DM65tOeoJoATiMXImsORBXbQNXgE"
+TOKEN = os.environ.get("TOKEN")
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("🤖 Bot ishlayapti!\n/gen cat")
@@ -21,11 +22,16 @@ async def gen(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_photo(photo=url)
 
 def main():
+    if not TOKEN:
+        print("TOKEN topilmadi! Render ENV tekshir!")
+        return
+
     app = ApplicationBuilder().token(TOKEN).build()
 
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("gen", gen))
 
+    print("BOT ISHLAYAPTI 🚀")
     app.run_polling()
 
 if __name__ == "__main__":
